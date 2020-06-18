@@ -22,7 +22,14 @@ impl Config {
             None => return Err("Missing filename"),
         };
 
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+        let case_sensitive = match args.next() {
+            Some(arg) => match arg.as_str() {
+                "-i" => false,
+                "-s" => true,
+                _ => return Err("received invalid config option"),
+            },
+            None => true,
+        };
 
         Ok(Config {
             query,
